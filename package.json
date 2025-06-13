@@ -12,6 +12,9 @@
   ],
   "scripts": {
     "build": "npx rollup -c",
+    "build:gh-pages": "npx rollup -c && echo 'GitHub Pages 构建完成'",
+    "deploy": "node scripts/deploy.js",
+    "deploy:manual": "npm run build && gh-pages -d dist",
     "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -37,6 +40,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-node-resolve": "^16.0.1",
+    "gh-pages": "^6.1.1",
     "pako": "^2.1.0",
     "rollup": "^2.79.2",
     "rollup-plugin-copy": "^3.5.0",
