@@ -1,0 +1,1217 @@
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DifyChat Demo - Dify API 聊天组件</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+        color: #333;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .demo-h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .demo-h2 {
+        color: #444;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-size: 18px;
+      }
+
+      .demo-p {
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .form-row {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+        flex: 1 1 300px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      .color-preview {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        vertical-align: middle;
+        margin-left: 5px;
+        border: 1px solid #ddd;
+      }
+
+      .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .demo-btn {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        flex: 1;
+        min-width: 100px;
+      }
+
+      .demo-btn:hover {
+        background-color: #45a049;
+      }
+
+      .demo-btn:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+
+      .demo-btn.danger {
+        background-color: #dc3545;
+      }
+
+      .demo-btn.danger:hover {
+        background-color: #c82333;
+      }
+
+      .demo-btn.warning {
+        background-color: #ffc107;
+        color: #212529;
+      }
+
+      .demo-btn.warning:hover {
+        background-color: #e0a800;
+      }
+
+      .action-buttons button {
+        flex: 1;
+      }
+
+      .features {
+        margin-top: 30px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-radius: 4px;
+        border-left: 4px solid #4caf50;
+      }
+
+      .features h3 {
+        margin-top: 0;
+        color: #4caf50;
+      }
+
+      .features ul {
+        padding-left: 20px;
+        line-height: 1.6;
+      }
+
+      .code-block {
+        background-color: #f4f4f4;
+        padding: 15px;
+        border-radius: 4px;
+        font-family: monospace;
+        overflow-x: auto;
+        margin: 10px 0;
+        font-size: 14px;
+        line-height: 1.5;
+        position: relative;
+      }
+
+      .code-copy {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: #ddd;
+        border: none;
+        border-radius: 4px;
+        padding: 3px 8px;
+        font-size: 12px;
+        cursor: pointer;
+        width: auto;
+      }
+
+      .code-copy:hover {
+        background: #ccc;
+      }
+
+      .log-container {
+        margin-top: 15px;
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px;
+        background-color: #1e1e1e;
+        color: #f0f0f0;
+        font-family: 'Courier New', monospace;
+      }
+
+      .log-entry {
+        margin-bottom: 5px;
+        font-size: 13px;
+      }
+
+      .log-info { color: #4fc3f7; }
+      .log-success { color: #81c784; }
+      .log-error { color: #e57373; }
+      .log-warn { color: #ffb74d; }
+
+      .checkbox-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .checkbox-group input[type='checkbox'] {
+        width: auto;
+        margin-right: 8px;
+      }
+
+      .event-section {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f0f8ff;
+        border-radius: 4px;
+        border-left: 4px solid #007bff;
+      }
+
+      .event-section h4 {
+        margin-top: 0;
+        color: #007bff;
+      }
+
+      .hook-status {
+        display: inline-block;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 11px;
+        font-weight: bold;
+        margin-left: 5px;
+      }
+
+      .hook-active {
+        background-color: #d4edda;
+        color: #155724;
+      }
+
+      .hook-inactive {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+    </style>
+    <script src="./difychat.min.js?v=1749779901409"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="demo-h1">DifyChat 演示</h1>
+      <p class="demo-p">
+        这是一个基于Dify API的聊天组件，支持流式输出、历史消息、事件系统等功能。
+      </p>
+
+      <h2 class="demo-h2">配置选项</h2>
+
+      <div class="form-group">
+        <label for="baseUrl"
+          >API 基础URL 
+          <!-- <span style="color: red">*</span> -->
+        </label>
+        <input
+          type="text"
+          id="baseUrl"
+          placeholder="默认为: https://api.dify.ai/v1"
+          value=""
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="apiKey">API 密钥 <span style="color: red">*</span></label>
+        <input
+          type="text"
+          id="apiKey"
+          placeholder="输入您的API密钥"
+          value="app-xxxxxxxx"
+        />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="user">用户ID (可选)</label>
+          <input
+            type="text"
+            id="user"
+            placeholder="用于标识用户身份"
+            value=""
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="conversation_id"
+            >会话ID (可选，配合用户ID获取对应用户历史消息)</label
+          >
+          <input
+            type="text"
+            id="conversation_id"
+            placeholder="用于获取历史消息"
+            value=""
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="title">聊天窗口标题 (不传默认从接口获取)</label>
+          <input type="text" id="title" placeholder="聊天窗口标题" value="" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="query">初始提问内容</label>
+        <input
+          type="text"
+          id="query"
+          placeholder="打开窗口后自动发送此提问"
+          value=""
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="opening_statement">自定义开场白（优先级高于/parameters接口）</label>
+        <input
+          type="text"
+          id="opening_statement"
+          placeholder="你好！我是你的专属AI助手，有什么可以帮助你的吗？"
+          value=""
+        />
+        <small style="display: block; color: #666; margin-top: 5px"
+          >如果设置了此项，将覆盖从/parameters接口获取的开场白</small
+        >
+      </div>
+
+      <div class="form-group">
+        <label>自定义推荐问题（优先级高于/parameters接口）</label>
+        <div id="suggestedQuestionsContainer" style="margin-bottom: 10px">
+          <!-- 推荐问题列表区域 -->
+        </div>
+        <div style="display: flex; gap: 10px; margin-bottom: 10px">
+          <input
+            type="text"
+            id="questionInput"
+            placeholder="输入推荐问题"
+            style="flex: 1"
+            value=""
+          />
+          <button
+            id="addQuestionBtn"
+            class="demo-btn"
+            style="flex: 0 0 auto; min-width: 80px"
+          >
+            添加
+          </button>
+        </div>
+        <small style="display: block; color: #666; margin-top: 5px"
+          >如果设置了推荐问题，将覆盖从/parameters接口获取的推荐问题</small
+        >
+      </div>
+
+      <div class="form-group">
+        <label>输入字段 (格式:{key:value})</label>
+        <div id="inputsContainer" style="margin-bottom: 10px">
+          <!-- 键值对输入区域 -->
+        </div>
+        <div style="display: flex; gap: 10px; margin-bottom: 10px">
+          <input
+            type="text"
+            id="inputKey"
+            placeholder="键名"
+            style="flex: 1"
+            value=""
+          />
+          <input
+            type="text"
+            id="inputValue"
+            placeholder="值"
+            style="flex: 1"
+            value=""
+          />
+          <button
+            id="addInputBtn"
+            class="demo-btn"
+            style="flex: 0 0 auto; min-width: 80px"
+          >
+            添加
+          </button>
+        </div>
+        <small style="display: block; color: #666; margin-top: 5px"
+          >添加的键值对将作为inputs参数传递给API</small
+        >
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="primaryColor"
+            >主题色(不传默认#009944)
+            <span class="color-preview" id="primaryColorPreview"></span
+          ></label>
+          <input
+            type="color"
+            id="primaryColor"
+            value="#009944"
+            style="width: 50px; height: 30px; vertical-align: middle"
+          />
+          <input
+            type="text"
+            id="primaryColorText"
+            placeholder="#RRGGBB"
+            value="#009944"
+            style="width: calc(100% - 60px); margin-left: 5px"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="hoverColor"
+            >悬停色(不传默认#45a049)
+            <span class="color-preview" id="hoverColorPreview"></span
+          ></label>
+          <input
+            type="color"
+            id="hoverColor"
+            value="#45a049"
+            style="width: 50px; height: 30px; vertical-align: middle"
+          />
+          <input
+            type="text"
+            id="hoverColorText"
+            placeholder="#RRGGBB"
+            value="#45a049"
+            style="width: calc(100% - 60px); margin-left: 5px"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="minWidth">最小宽度 (px)(默认300px)</label>
+          <input type="number" id="minWidth" placeholder="最小宽度" value="" />
+        </div>
+
+        <div class="form-group">
+          <label for="defaultWidth">默认宽度 (px)(默认500px)</label>
+          <input
+            type="number"
+            id="defaultWidth"
+            placeholder="默认宽度"
+            value=""
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="maxWidthPercent">最大宽度 (%)(默认75%)</label>
+          <input
+            type="number"
+            id="maxWidthPercent"
+            placeholder="最大宽度百分比"
+            value=""
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="height">聊天窗口高度 (vh)(默认80vh)</label>
+          <input
+            type="number"
+            id="height"
+            placeholder="聊天窗口高度"
+            value=""
+            min="50"
+            max="86"
+          />
+          <small style="display: block; color: #666; margin-top: 5px"
+            >窗口高度百分比，最大值为86vh</small
+          >
+        </div>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="readOnly" name="readOnly" />
+        <label for="readOnly">只读模式</label>
+      </div>
+
+      <h2 class="demo-h2">聊天控制</h2>
+
+      <div class="button-group action-buttons">
+        <button id="initChat" class="primary-btn demo-btn">初始化聊天</button>
+        <button id="openChat" disabled class="demo-btn">打开聊天</button>
+        <button id="closeChat" disabled class="demo-btn">关闭聊天</button>
+        <button id="clearChat" disabled class="demo-btn">重置会话</button>
+        <button id="destroyChat" disabled class="demo-btn">销毁聊天</button>
+      </div>
+
+      <div style="margin-top: 15px; padding: 10px; background-color: #f0f8ff; border-radius: 4px; border-left: 4px solid #007bff;">
+        <h4 style="margin: 0 0 8px 0; color: #007bff;">⌨️ 键盘快捷键</h4>
+        <p style="margin: 0; font-size: 14px; color: #666;">
+          <strong>Alt + C</strong>: 切换聊天窗口的显示状态（打开/关闭）
+        </p>
+        <small style="color: #999;">快捷键仅在聊天组件已初始化后生效</small>
+      </div>
+
+      <!-- 事件系统演示部分 -->
+      <div class="event-section">
+        <small>前置钩子会在发送消息前执行，可以用于验证、确认或异步处理。</small>
+
+        <div class="code-block" style="margin-top: 15px;">
+          <pre><code>// 前置钩子示例（支持修改options）
+chat.before('before:sendMessage', (done, options, message) => {
+  // 验证消息
+  if (message.length > 100) {
+    alert('消息太长！');
+    done(false); // 阻止发送
+    return;
+  }
+  
+  // 可以动态修改options配置
+  options.inputs.html_content = "<div>123</div>";
+  
+  done(true); // 继续发送
+});</code></pre>
+        </div>
+      </div>
+
+      <h2 class="demo-h2">事件日志</h2>
+      <div style="margin-bottom: 10px;">
+        <button id="clearEventLog" class="demo-btn" style="flex: none; min-width: auto;">清空日志</button>
+      </div>
+      <div class="log-container" id="eventLog">
+        <div class="log-entry">等待操作...</div>
+      </div>
+
+      <h2 class="demo-h2">生成的代码</h2>
+      <div class="code-block" id="codePreview">
+        <button class="code-copy" onclick="copyCode()">复制</button>
+        <pre><code id="generatedCode">// 请配置选项后查看生成的代码</code></pre>
+      </div>
+
+      <h2 class="demo-h2">在您的网站中使用</h2>
+      <div class="code-block">
+        <button class="code-copy" onclick="copyInstallCode()">复制</button>
+        <pre><code id="installCode">&lt;!-- 1. 引入JS文件 --&gt;
+&lt;script src="./difychat.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- 2. 初始化和使用 --&gt;
+&lt;script&gt;
+  // 创建AI聊天组件
+  let chat = new DifyChat({
+    apiKey: '你的API密钥',
+  });
+  
+  // 添加前置钩子（可选）
+  chat.before('before:sendMessage', (done, options, message) => {
+    // 在发送消息前进行验证或处理
+    if (message.length > 500) {
+      alert('消息太长！');
+      done(false); // 阻止发送
+      return;
+    }
+    
+    // 可以动态修改options配置
+    options.inputs.html_content = "<div>自定义内容</div>";
+    
+    done(true); // 继续发送
+  });
+  
+  // 监听事件（可选）
+  chat.on('sendMessage:success', (message, response) => {
+    console.log('消息发送成功:', message);
+  });
+  
+  // 初始化聊天组件
+  chat.init().then(() => {
+    // 可以在页面加载后自动打开，或者绑定到按钮点击事件
+    // chat.open();
+  });
+  
+  // 组件方法
+  // 打开聊天窗口：chat.open();
+  // 关闭聊天窗口：chat.close();
+  // 重置会话：chat.reset();
+  // 销毁聊天组件：chat.destroy();
+
+&lt;/script&gt;</code></pre>
+      </div>
+    </div>
+
+    <script>
+      // 全局变量，存储聊天实例
+      let chatInstance = null;
+      let basicListeners = {};
+      let hookStatusFlags = {
+        validation: false,
+        confirm: false,
+        async: false
+      };
+
+      // 添加事件日志
+      function addLog(message, type = 'info') {
+        const logContainer = document.getElementById('eventLog');
+        const logEntry = document.createElement('div');
+        logEntry.className = `log-entry log-${type}`;
+        logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+        logContainer.appendChild(logEntry);
+        logContainer.scrollTop = logContainer.scrollHeight;
+      }
+
+      // 更新按钮状态
+      function updateButtonState(hasInstance) {
+        document.getElementById('initChat').disabled = hasInstance;
+        document.getElementById('openChat').disabled = !hasInstance;
+        document.getElementById('closeChat').disabled = !hasInstance;
+        document.getElementById('clearChat').disabled = !hasInstance;
+        document.getElementById('destroyChat').disabled = !hasInstance;
+      }
+
+      // 更新钩子状态显示
+      function updateHookStatus(hookType, isActive) {
+        const statusElement = document.getElementById(`${hookType}HookStatus`);
+        if (statusElement) {
+          statusElement.textContent = isActive ? '已启用' : '未启用';
+          statusElement.className = `hook-status ${isActive ? 'hook-active' : 'hook-inactive'}`;
+        }
+        hookStatusFlags[hookType] = isActive;
+      }
+
+      // 更新颜色预览
+      function updateColorPreview(inputId, textId, previewId) {
+        const colorInput = document.getElementById(inputId);
+        const textInput = document.getElementById(textId);
+        const preview = document.getElementById(previewId);
+        preview.style.backgroundColor = colorInput.value;
+        textInput.value = colorInput.value;
+
+        // 颜色选择器变化时更新文本框和预览
+        colorInput.addEventListener('input', function () {
+          textInput.value = this.value;
+          preview.style.backgroundColor = this.value;
+          updateGeneratedCode();
+        });
+
+        // 文本框变化时更新颜色选择器和预览
+        textInput.addEventListener('input', function () {
+          if (this.value.match(/^#[0-9A-Fa-f]{6}$/)) {
+            colorInput.value = this.value;
+            preview.style.backgroundColor = this.value;
+            updateGeneratedCode();
+          }
+        });
+      }
+
+      // 解析输入字段
+      function parseInputs(inputString) {
+        if (!inputString || !inputString.trim()) {
+          return undefined;
+        }
+
+        try {
+          // 尝试解析为对象
+          const cleanedString = inputString.replace(/'/g, '"'); // 将单引号替换为双引号
+          return JSON.parse(cleanedString);
+        } catch (error) {
+          console.error('解析输入字段时出错:', error);
+          // 尝试使用Function构造函数解析
+          try {
+            // 允许更宽松的格式如 {name:'张三',age:25}
+            return new Function('return ' + inputString)();
+          } catch (e) {
+            console.error('尝试使用Function解析输入字段时出错:', e);
+            alert(
+              '输入字段格式错误，请使用有效的对象格式，如: {name:"张三",age:25}'
+            );
+            return undefined;
+          }
+        }
+      }
+
+      // 获取当前输入对象
+      function getInputsObject() {
+        const inputs = {};
+        const inputItems = document.querySelectorAll('.input-item');
+
+        inputItems.forEach((item) => {
+          const key = item.dataset.key;
+          const value = item.dataset.value;
+
+          // 尝试转换值的类型（如数字）
+          let parsedValue = value;
+          if (!isNaN(value) && value.trim() !== '') {
+            parsedValue = Number(value);
+          } else if (value === 'true') {
+            parsedValue = true;
+          } else if (value === 'false') {
+            parsedValue = false;
+          }
+
+          inputs[key] = parsedValue;
+        });
+
+        return Object.keys(inputs).length > 0 ? inputs : undefined;
+      }
+
+      // 获取当前推荐问题数组
+      function getSuggestedQuestionsArray() {
+        const questions = [];
+        const questionItems = document.querySelectorAll('.question-item');
+
+        questionItems.forEach((item) => {
+          const question = item.dataset.question;
+          if (question && question.trim()) {
+            questions.push(question.trim());
+          }
+        });
+
+        return questions.length > 0 ? questions : undefined;
+      }
+
+      // 获取配置选项
+      function getOptions() {
+        // 获取表单值
+        const getValue = (id) => {
+          const value = document.getElementById(id).value;
+          return value.trim() === '' ? undefined : value;
+        };
+        
+        return {
+          title: getValue('title'),
+          baseUrl: getValue('baseUrl'),
+          apiKey: getValue('apiKey'),
+          user: getValue('user'),
+          conversation_id: getValue('conversation_id'),
+          query: getValue('query'),
+          opening_statement: getValue('opening_statement'),
+          suggested_questions: getSuggestedQuestionsArray(),
+          primaryColor: getValue('primaryColorText'),
+          hoverColor: getValue('hoverColorText'),
+          minWidth: getValue('minWidth') === '' ? undefined : Number(getValue('minWidth')),
+          defaultWidth: getValue('defaultWidth') === '' ? undefined : Number(getValue('defaultWidth')),
+          maxWidthPercent: getValue('maxWidthPercent') === '' ? undefined : Number(getValue('maxWidthPercent')),
+          height: getValue('height') === '' ? undefined : Number(getValue('height')),
+          readOnly: document.getElementById('readOnly').checked,
+          inputs: getInputsObject()
+        };
+      }
+
+      // 更新生成的代码
+      function updateGeneratedCode() {
+        const options = getOptions();
+        const defaultOptions = {
+          title: 'AI助手',
+          baseUrl: 'https://api.dify.ai/v1',
+          primaryColor: '#009944',
+          hoverColor: '#45a049',
+          minWidth: 300,
+          defaultWidth: 500,
+          maxWidthPercent: 75,
+          height: 80,
+          readOnly: false
+        };
+
+        let codeTemplate = `// 初始化聊天组件
+const chat = new DifyChat({`;
+
+        // 只有当baseUrl与默认值不同时才显示
+        if (options.baseUrl && options.baseUrl !== defaultOptions.baseUrl) {
+          codeTemplate += `\n  baseUrl: "${options.baseUrl}",`;
+        }
+        
+        codeTemplate += `
+  apiKey: "${options.apiKey}"`;
+
+        // 添加非空参数，且值不等于默认值的参数
+        if (options.title && options.title !== defaultOptions.title) {
+          codeTemplate += `,\n  title: "${options.title}"`;
+        }
+        
+        if (options.user) {
+          codeTemplate += `,\n  user: "${options.user}"`;
+        }
+
+        if (options.conversation_id) {
+          codeTemplate += `,\n  conversation_id: "${options.conversation_id}"`;
+        }
+
+        if (options.query) {
+          codeTemplate += `,\n  query: "${options.query}"`;
+        }
+
+        if (options.opening_statement) {
+          codeTemplate += `,\n  opening_statement: "${options.opening_statement}"`;
+        }
+
+        if (options.suggested_questions && options.suggested_questions.length > 0) {
+          const questionsStr = JSON.stringify(options.suggested_questions, null, 2)
+            .replace(/\n/g, '\n  '); // 添加适当的缩进
+          codeTemplate += `,\n  suggested_questions: ${questionsStr}`;
+        }
+
+        if (options.inputs) {
+          // 将inputs对象转为字符串，并保持格式
+          const inputsStr = JSON.stringify(options.inputs, null, 2)
+            .replace(/\n/g, '\n  ') // 添加适当的缩进
+            .replace(/^{\s+/, '{') // 修复开头的格式
+            .replace(/\s+}$/, '}'); // 修复结尾的格式
+
+          codeTemplate += `,\n  inputs: ${inputsStr}`;
+        }
+
+        // 只有当颜色与默认值不同时才添加颜色参数
+        if (
+          options.primaryColor &&
+          options.primaryColor !== defaultOptions.primaryColor
+        ) {
+          codeTemplate += `,\n  primaryColor: "${options.primaryColor}"`;
+        }
+
+        if (
+          options.hoverColor &&
+          options.hoverColor !== defaultOptions.hoverColor
+        ) {
+          codeTemplate += `,\n  hoverColor: "${options.hoverColor}"`;
+        }
+
+        // 添加其他数值参数（只有当它们有值且不等于默认值时）
+        if (options.minWidth && options.minWidth !== defaultOptions.minWidth) {
+          codeTemplate += `,\n  minWidth: ${options.minWidth}`;
+        }
+
+        if (options.defaultWidth && options.defaultWidth !== defaultOptions.defaultWidth) {
+          codeTemplate += `,\n  defaultWidth: ${options.defaultWidth}`;
+        }
+
+        if (options.maxWidthPercent && options.maxWidthPercent !== defaultOptions.maxWidthPercent) {
+          codeTemplate += `,\n  maxWidthPercent: ${options.maxWidthPercent}`;
+        }
+
+        if (options.height && options.height !== defaultOptions.height) {
+          codeTemplate += `,\n  height: ${options.height}`;
+        }
+
+        // 对于布尔值readOnly，只有为true时才添加
+        if (options.readOnly) {
+          codeTemplate += `,\n  readOnly: true`;
+        }
+
+        codeTemplate += `
+});
+
+// 添加前置钩子示例（可选）
+chat.before('before:sendMessage', (done, options, message) => {
+  // 在发送消息前进行验证或处理
+  console.log('准备发送消息:', message);
+  
+  // 可以动态修改options配置
+  options.inputs.html_content = "<div>动态内容</div>";
+  
+  done(true); // 调用done(true)继续发送，done(false)阻止发送
+});
+
+// 监听事件示例（可选）
+chat.on('sendMessage:success', (message, response) => {
+  console.log('消息发送成功:', message);
+});
+
+// 初始化并打开聊天窗口
+chat.init().then(() => {
+  chat.open();
+});`;
+
+        document.getElementById('generatedCode').textContent = codeTemplate;
+      }
+
+      // 复制代码功能
+      function copyCode() {
+        const codeElement = document.getElementById('generatedCode');
+        navigator.clipboard.writeText(codeElement.textContent).then(() => {
+          const copyBtn = document.querySelector('.code-copy');
+          copyBtn.textContent = '已复制!';
+          setTimeout(() => {
+            copyBtn.textContent = '复制';
+          }, 2000);
+        });
+      }
+
+      // 复制安装代码功能
+      function copyInstallCode() {
+        const codeElement = document.getElementById('installCode');
+        navigator.clipboard.writeText(codeElement.textContent).then(() => {
+          const copyBtns = document.querySelectorAll('.code-copy');
+          const installCopyBtn = copyBtns[1];
+          installCopyBtn.textContent = '已复制!';
+          setTimeout(() => {
+            installCopyBtn.textContent = '复制';
+          }, 2000);
+        });
+      }
+
+      // ===== 事件系统相关函数 =====
+
+      // 初始化颜色预览
+      updateColorPreview(
+        'primaryColor',
+        'primaryColorText',
+        'primaryColorPreview'
+      );
+      updateColorPreview('hoverColor', 'hoverColorText', 'hoverColorPreview');
+
+      // 添加键值对函数
+      function addInputItem(key, value) {
+        if (!key || !value) return;
+
+        const inputsContainer = document.getElementById('inputsContainer');
+        const inputItem = document.createElement('div');
+        inputItem.className = 'input-item';
+        inputItem.dataset.key = key;
+        inputItem.dataset.value = value;
+        inputItem.style.display = 'flex';
+        inputItem.style.alignItems = 'center';
+        inputItem.style.marginBottom = '5px';
+        inputItem.style.padding = '5px';
+        inputItem.style.backgroundColor = '#f9f9f9';
+        inputItem.style.borderRadius = '4px';
+
+        const keySpan = document.createElement('span');
+        keySpan.textContent = key + ': ';
+        keySpan.style.fontWeight = 'bold';
+        keySpan.style.marginRight = '5px';
+
+        const valueSpan = document.createElement('span');
+        valueSpan.textContent = value;
+        valueSpan.style.flex = '1';
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = '删除';
+        deleteBtn.className = 'demo-btn';
+        deleteBtn.style.padding = '2px 5px';
+        deleteBtn.style.fontSize = '12px';
+        deleteBtn.style.marginLeft = '10px';
+
+        deleteBtn.addEventListener('click', function () {
+          inputsContainer.removeChild(inputItem);
+          updateGeneratedCode();
+        });
+
+        inputItem.appendChild(keySpan);
+        inputItem.appendChild(valueSpan);
+        inputItem.appendChild(deleteBtn);
+
+        inputsContainer.appendChild(inputItem);
+        updateGeneratedCode();
+      }
+
+      // 添加推荐问题函数
+      function addQuestionItem(question) {
+        if (!question || !question.trim()) return;
+
+        const questionsContainer = document.getElementById('suggestedQuestionsContainer');
+        const questionItem = document.createElement('div');
+        questionItem.className = 'question-item';
+        questionItem.dataset.question = question.trim();
+        questionItem.style.display = 'flex';
+        questionItem.style.alignItems = 'center';
+        questionItem.style.marginBottom = '5px';
+        questionItem.style.padding = '5px';
+        questionItem.style.backgroundColor = '#f0f8ff';
+        questionItem.style.borderRadius = '4px';
+        questionItem.style.border = '1px solid #e0e0e0';
+
+        const questionSpan = document.createElement('span');
+        questionSpan.textContent = question.trim();
+        questionSpan.style.flex = '1';
+        questionSpan.style.marginRight = '10px';
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = '删除';
+        deleteBtn.className = 'demo-btn';
+        deleteBtn.style.padding = '2px 5px';
+        deleteBtn.style.fontSize = '12px';
+        deleteBtn.style.backgroundColor = '#dc3545';
+
+        deleteBtn.addEventListener('click', function () {
+          questionsContainer.removeChild(questionItem);
+          updateGeneratedCode();
+        });
+
+        questionItem.appendChild(questionSpan);
+        questionItem.appendChild(deleteBtn);
+
+        questionsContainer.appendChild(questionItem);
+        updateGeneratedCode();
+      }
+
+      // 添加输入按钮点击事件
+      document
+        .getElementById('addInputBtn')
+        .addEventListener('click', function () {
+          const key = document.getElementById('inputKey').value.trim();
+          const value = document.getElementById('inputValue').value.trim();
+
+          if (!key) {
+            alert('请输入键名');
+            return;
+          }
+
+          if (!value) {
+            alert('请输入值');
+            return;
+          }
+
+          addInputItem(key, value);
+
+          // 清空输入框
+          document.getElementById('inputKey').value = '';
+          document.getElementById('inputValue').value = '';
+          document.getElementById('inputKey').focus();
+        });
+
+      // 添加推荐问题按钮点击事件
+      document
+        .getElementById('addQuestionBtn')
+        .addEventListener('click', function () {
+          const question = document.getElementById('questionInput').value.trim();
+
+          if (!question) {
+            alert('请输入推荐问题');
+            return;
+          }
+
+          addQuestionItem(question);
+
+          // 清空输入框
+          document.getElementById('questionInput').value = '';
+          document.getElementById('questionInput').focus();
+        });
+
+      // 推荐问题输入框回车事件
+      document
+        .getElementById('questionInput')
+        .addEventListener('keypress', function (e) {
+          if (e.key === 'Enter') {
+            document.getElementById('addQuestionBtn').click();
+          }
+        });
+
+      // 监听输入变化，更新生成的代码
+      document.querySelectorAll('input').forEach((input) => {
+        input.addEventListener('input', updateGeneratedCode);
+        input.addEventListener('change', updateGeneratedCode);
+      });
+
+      // 特别为新增的输入字段添加监听器
+      document.getElementById('opening_statement').addEventListener('input', updateGeneratedCode);
+
+      // 页面加载时，添加示例键值对和推荐问题
+      setTimeout(() => {
+        // 如果键值对容器为空，添加默认示例
+        if (document.querySelectorAll('.input-item').length === 0) {
+          const defaultKey = document.getElementById('inputKey').value.trim();
+          const defaultValue = document
+            .getElementById('inputValue')
+            .value.trim();
+          if (defaultKey && defaultValue) {
+            addInputItem(defaultKey, defaultValue);
+          }
+        }
+
+        // 添加一些默认的推荐问题示例
+        if (document.querySelectorAll('.question-item').length === 0) {
+          const defaultQuestions = [
+            '请介绍一下你的功能',
+            '如何使用文件上传功能？',
+            '能帮我分析数据吗？',
+            '有什么新功能推荐？'
+          ];
+          
+          // 可以选择添加一些默认示例，或者让用户自己添加
+          // defaultQuestions.forEach(question => {
+          //   addQuestionItem(question);
+          // });
+        }
+      }, 100);
+
+      // 初始化生成的代码
+      updateGeneratedCode();
+
+      // ===== 事件绑定 =====
+
+      // 初始化聊天按钮点击事件
+      document
+        .getElementById('initChat')
+        .addEventListener('click', function () {
+          const options = getOptions();
+
+          if (!options.apiKey) {
+            alert('请输入API密钥');
+            return;
+          }
+
+          try {
+            // 显示日志，便于调试
+            const inputsData = options.inputs
+              ? JSON.stringify(options.inputs)
+              : '无';
+            addLog(`准备创建聊天组件，inputs参数: ${inputsData}`);
+
+            // 添加调试信息，检查marked和hljs是否正确加载
+            addLog(
+              `marked库加载状态: ${
+                typeof window.marked !== 'undefined' ? '已加载' : '未加载'
+              }`
+            );
+            addLog(
+              `highlight.js加载状态: ${
+                typeof window.hljs !== 'undefined' ? '已加载' : '未加载'
+              }`
+            );
+            
+            // 初始化聊天组件 - 直接使用XygChat构造函数
+            chatInstance = new DifyChat(options);
+            addLog(
+              `聊天组件创建成功，配置: ${JSON.stringify(options, null, 2)}`
+            );
+
+            // 初始化
+            chatInstance
+              .init()
+              .then(() => {
+                addLog('聊天组件初始化完成', 'success');
+                updateButtonState(true);
+              })
+              .catch((error) => {
+                addLog(`初始化失败: ${error.message}`, 'error');
+              });
+          } catch (error) {
+            console.log(error);
+            addLog(`创建聊天组件时出错: ${error.message}`, 'error');
+          }
+        });
+
+      // 打开聊天按钮点击事件
+      document
+        .getElementById('openChat')
+        .addEventListener('click', function () {
+          if (chatInstance) {
+            chatInstance.open();
+            addLog('聊天窗口已打开');
+          }
+        });
+
+      // 关闭聊天按钮点击事件
+      document
+        .getElementById('closeChat')
+        .addEventListener('click', function () {
+          if (chatInstance) {
+            chatInstance.close();
+            addLog('聊天窗口已关闭');
+          }
+        });
+
+      // 重置会话按钮点击事件
+      document
+        .getElementById('clearChat')
+        .addEventListener('click', function () {
+          if (chatInstance) {
+            chatInstance.reset();
+            addLog('会话已重置');
+          }
+        });
+
+      // 销毁聊天按钮点击事件
+      document
+        .getElementById('destroyChat')
+        .addEventListener('click', function () {
+          if (chatInstance) {
+            chatInstance.destroy();
+            chatInstance = null;
+            addLog('聊天组件已销毁，可以重新初始化');
+            updateButtonState(false);
+            // 重置钩子状态
+            updateHookStatus('validation', false);
+            updateHookStatus('confirm', false);
+            updateHookStatus('async', false);
+          }
+        });
+
+          // 测试用户钩子的函数
+    function testUserHook() {
+      if (!chatInstance) {
+        addLog('请先初始化聊天组件', 'error');
+        return;
+      }
+      
+      // 清除现有钩子
+      chatInstance._eventHooks = {};
+      
+      // 添加用户的钩子
+      chatInstance.before('before:sendMessage', function(done, options, message){
+        console.log('用户钩子执行: 1123', done);
+        addLog('用户钩子执行: 设置inputs.html_content', 'warn');
+        
+        // 现在options.inputs应该已经自动初始化了
+        options.inputs.html_content = "<div>123</div>";
+        
+        console.log('调用done(true)');
+        addLog('调用done(true)', 'info');
+        addLog('设置后的options.inputs: ' + JSON.stringify(options.inputs), 'info');
+        done(true);
+      });
+      
+      addLog('用户钩子已添加 - 请尝试发送消息', 'success');
+    }
+
+    
+    // 测试按钮事件
+    if (document.getElementById('testUserHook')) {
+      document.getElementById('testUserHook').addEventListener('click', testUserHook);
+    }
+      
+      // 清空事件日志
+      document.getElementById('clearEventLog').addEventListener('click', () => {
+        document.getElementById('eventLog').innerHTML = '<div class="log-entry">日志已清空...</div>';
+        });
+    </script>
+  </body>
+</html>
